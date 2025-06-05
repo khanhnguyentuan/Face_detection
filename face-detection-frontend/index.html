@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Detection API - Test Interface</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Header -->
+        <header class="header-section">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h1 class="display-4 text-white mb-0">
+                            <i class="fas fa-search-plus me-3"></i>Face Detection API
+                        </h1>
+                        <p class="lead text-white-50">Ứng dụng nhận diện khuôn mặt sử dụng OpenCV</p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <div class="api-status">
+                            <span class="badge bg-warning" id="apiStatus">
+                                <i class="fas fa-circle-notch fa-spin"></i> Đang kiểm tra...
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="container mt-4">
+            <div class="row">
+                <!-- Left Panel - Upload & Controls -->
+                <div class="col-lg-4">
+                    <div class="card shadow-lg mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-upload me-2"></i>Tải ảnh lên</h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- File Upload -->
+                            <div class="upload-area" id="uploadArea">
+                                <div class="upload-content">
+                                    <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                    <h5>Kéo thả ảnh vào đây</h5>
+                                    <p class="text-muted">hoặc click để chọn file</p>
+                                    <input type="file" id="imageInput" accept="image/*" class="d-none">
+                                </div>
+                            </div>                              <!-- Sample Images -->
+                            <div class="mt-3">
+                                <h6><i class="fas fa-images me-2"></i>Ảnh mẫu:</h6>
+                                <div class="row g-2" id="sampleImages">
+                                    <div class="col-4">
+                                        <div class="sample-image" data-sample="portrait">
+                                            <img src="./samples/portrait.jpg" alt="Portrait" class="sample-thumbnail">
+                                            <div class="sample-overlay">
+                                                <small>Portrait</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="sample-image" data-sample="group">
+                                            <img src="./samples/group.jpg" alt="Group" class="sample-thumbnail">
+                                            <div class="sample-overlay">
+                                                <small>Group</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="sample-image" data-sample="family">
+                                            <img src="./samples/family.jpg" alt="Family" class="sample-thumbnail">
+                                            <div class="sample-overlay">
+                                                <small>Family</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Parameters Panel -->
+                    <div class="card shadow-lg">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0"><i class="fas fa-sliders-h me-2"></i>Thông số nhận diện</h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- minSize -->
+                            <div class="mb-4">
+                                <label for="minSize" class="form-label">
+                                    <i class="fas fa-expand-alt me-1"></i>Kích thước tối thiểu
+                                    <span class="badge bg-secondary" id="minSizeValue">20</span>
+                                </label>
+                                <input type="range" class="form-range" id="minSize" min="10" max="100" value="20">
+                                <div class="form-text">
+                                    <small><i class="fas fa-info-circle"></i> Khuôn mặt nhỏ hơn sẽ bị bỏ qua</small>
+                                </div>
+                            </div>
+
+                            <!-- scaleFactor -->
+                            <div class="mb-4">
+                                <label for="scaleFactor" class="form-label">
+                                    <i class="fas fa-search me-1"></i>Hệ số tỷ lệ
+                                    <span class="badge bg-secondary" id="scaleFactorValue">1.1</span>
+                                </label>
+                                <input type="range" class="form-range" id="scaleFactor" min="1.05" max="1.3" step="0.01" value="1.1">
+                                <div class="form-text">
+                                    <small><i class="fas fa-info-circle"></i> Nhỏ hơn = chính xác hơn, lớn hơn = nhanh hơn</small>
+                                </div>
+                            </div>
+
+                            <!-- minNeighbors -->
+                            <div class="mb-4">
+                                <label for="minNeighbors" class="form-label">
+                                    <i class="fas fa-users me-1"></i>Số láng giềng tối thiểu
+                                    <span class="badge bg-secondary" id="minNeighborsValue">4</span>
+                                </label>
+                                <input type="range" class="form-range" id="minNeighbors" min="1" max="10" value="4">
+                                <div class="form-text">
+                                    <small><i class="fas fa-info-circle"></i> Cao hơn = ít false positive</small>
+                                </div>
+                            </div>
+
+                            <!-- Preset Buttons -->
+                            <div class="mb-3">
+                                <h6><i class="fas fa-magic me-2"></i>Cài đặt sẵn:</h6>
+                                <div class="btn-group w-100 mb-2" role="group">
+                                    <button type="button" class="btn btn-outline-success btn-sm" onclick="setPreset('accuracy')">
+                                        <i class="fas fa-bullseye"></i> Chính xác
+                                    </button>
+                                    <button type="button" class="btn btn-outline-warning btn-sm" onclick="setPreset('balanced')">
+                                        <i class="fas fa-balance-scale"></i> Cân bằng
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="setPreset('speed')">
+                                        <i class="fas fa-tachometer-alt"></i> Nhanh
+                                    </button>
+                                </div>
+                            </div>                            <!-- Detect Button -->
+                            <button class="btn btn-primary w-100 btn-lg mb-2" id="detectBtn" disabled>
+                                <i class="fas fa-play me-2"></i>Nhận diện khuôn mặt
+                            </button>
+                            
+                            <!-- Test Button (for debugging) -->
+                            <button class="btn btn-secondary w-100 btn-sm" id="testBtn" onclick="testResults()" style="font-size: 0.8rem;">
+                                <i class="fas fa-vial me-1"></i>Test hiển thị kết quả
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel - Results -->
+                <div class="col-lg-8">
+                    <div class="card shadow-lg">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Kết quả nhận diện</h5>
+                        </div>
+                        <div class="card-body">                            <!-- Image Preview -->
+                            <div class="image-preview-container mb-3" id="imagePreviewContainer" style="display: none;">
+                                <div class="position-relative d-inline-block">
+                                    <img id="imagePreview" class="img-fluid rounded shadow" alt="Preview" style="display: block;">
+                                    <canvas id="detectionCanvas" class="detection-overlay"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Results Info -->
+                            <div class="results-info" id="resultsInfo" style="display: none;">
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <div class="stat-card">
+                                            <div class="stat-icon bg-primary">
+                                                <i class="fas fa-user-friends"></i>
+                                            </div>
+                                            <div class="stat-content">
+                                                <h3 id="faceCount">0</h3>
+                                                <p>Khuôn mặt</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="stat-card">
+                                            <div class="stat-icon bg-success">
+                                                <i class="fas fa-clock"></i>
+                                            </div>
+                                            <div class="stat-content">
+                                                <h3 id="processingTime">-</h3>
+                                                <p>Thời gian</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="stat-card">
+                                            <div class="stat-icon bg-info">
+                                                <i class="fas fa-image"></i>
+                                            </div>
+                                            <div class="stat-content">
+                                                <h3 id="imageSize">-</h3>
+                                                <p>Kích thước</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="stat-card">
+                                            <div class="stat-icon bg-warning">
+                                                <i class="fas fa-file-image"></i>
+                                            </div>
+                                            <div class="stat-content">
+                                                <h3 id="fileSize">-</h3>
+                                                <p>Dung lượng</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Face Details -->
+                                <div class="mt-4" id="faceDetails">
+                                    <h6><i class="fas fa-list me-2"></i>Chi tiết khuôn mặt:</h6>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>X</th>
+                                                    <th>Y</th>
+                                                    <th>Rộng</th>
+                                                    <th>Cao</th>
+                                                    <th>Diện tích</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="faceDetailsTable">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Loading State -->
+                            <div class="text-center" id="loadingState" style="display: none;">
+                                <div class="spinner-border text-primary mb-3" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <h5>Đang xử lý ảnh...</h5>
+                                <p class="text-muted">Vui lòng đợi trong giây lát</p>
+                            </div>
+
+                            <!-- Default State -->
+                            <div class="text-center text-muted" id="defaultState">
+                                <i class="fas fa-image fa-5x mb-3 opacity-25"></i>
+                                <h5>Chọn ảnh để bắt đầu nhận diện</h5>
+                                <p>Tải lên ảnh của bạn hoặc chọn ảnh mẫu bên trái</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-dark text-white text-center py-3 mt-5">
+            <div class="container">
+                <p class="mb-0">
+                    <i class="fas fa-code me-2"></i>Face Detection API by Nguyen Tuan Khanh
+                    <span class="mx-3">|</span>
+                    <i class="fab fa-python me-1"></i>Python OpenCV + 
+                    <i class="fab fa-java me-1"></i>Spring Boot
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+</body>
+</html>
