@@ -36,7 +36,8 @@ A complete face detection system with REST API backend and modern web frontend, 
 ## 🎬 Demo
 
 ### Video Demo
-*📹 [Demo Video](https://youtu.be/bLiLCBRuZGk)*
+*📹 [Demo Video]
+<iframe width="560" height="315" src="https://www.youtube.com/embed/bLiLCBRuZGk?si=N4oYpOXWE7PlZrf2" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 > **Note**: Video demo coming soon! Will showcase real-time face detection with parameter tuning.
 
