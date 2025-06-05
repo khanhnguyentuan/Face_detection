@@ -36,27 +36,30 @@ A complete face detection system with REST API backend and modern web frontend, 
 ## 🎬 Demo
 
 ### Video Demo
-*📹 [Demo Video](link-to-your-demo-video)*
+*📹 [Demo Video](https://youtu.be/bLiLCBRuZGk)*
 
 > **Note**: Video demo coming soon! Will showcase real-time face detection with parameter tuning.
 
 ### Screenshots
 
 #### Main Interface
-![Main Interface](docs/images/main-interface.png)
+![Main Interface]
+![image](https://github.com/user-attachments/assets/c372b17c-9946-49d0-9dad-f431a8245df6)
+
 *Modern, responsive web interface with drag-and-drop upload*
 
 #### Face Detection Results
-![Detection Results](docs/images/detection-results.png)
+![Detection Results]
+![image](https://github.com/user-attachments/assets/545e01a4-4386-4afc-bc45-70b128e6736f)
+
 *Real-time face detection with bounding boxes and detailed statistics*
 
 #### Parameter Tuning
-![Parameter Settings](docs/images/parameter-tuning.png)
+![Parameter Settings]
+![image](https://github.com/user-attachments/assets/e8f6ed5f-8240-41a6-af58-60774c1ee84b)
+
 *Adjustable detection parameters for optimal results*
 
-#### Sample Images Gallery
-![Sample Images](docs/images/sample-images.png)
-*Pre-loaded sample images for quick testing*
 
 ## 🏗️ Architecture
 
